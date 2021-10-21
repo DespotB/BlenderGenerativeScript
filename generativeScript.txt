@@ -1,0 +1,195 @@
+import bpy
+import random
+from pprint import pprint
+
+class Gemesis:
+    def __init__(self, gemId, upperBox, lowerBox, background, crystal):
+        #randomly asign different properties to gem
+        self.gemId = gemId
+        self.upperBox = upperBox
+        self.lowerBox = lowerBox
+        self.background = background
+        self.crystal = crystal
+        #kirstalColor = null;
+    
+    #TODO    
+    def hashMe(self):
+        #do hash
+        print("hashing")
+        
+class Traits:
+    def __init__(self):
+        #ADD ALL OBJECTS FROM ONE COLLECTION TO EACH LIST
+        self.upperBoxes = bpy.data.collections['UpperBoxes'].all_objects  #objects in objects are not good as they get displayed seperately
+        self.lowerBoxes = bpy.data.collections['LowerBoxes'].all_objects
+        self.crystals = bpy.data.collections['Crystals'].all_objects
+        self.backgrounds = bpy.data.collections['Backgrounds'].all_objects
+        
+        #ADD ALL MATERIAL TO EACH LIST
+        #self.upperBoxesMaterials = bpy.data.materials  not working yet
+        
+class Textures:      
+    def __init__(self):
+        #ADD ALL TEXTURES TO SUITING LISTS
+        upperBoxesTextures = [bpy.data.textures.get("crystal_blue")]#,bpy.data.textures.get("crystal_blue")]
+        
+        #ASIGN LIST TO SUITING PROPERTIES
+        self.upperBoxes = upperBoxesTextures
+        
+        
+class Materials:
+    def __init__(self):
+        #ADD ALL MATERIAL TO SUITING LISTS
+        upperBoxesMaterials = [bpy.data.materials.get("Material.005")]#,bpy.data.materials.get("crystal_blue")]
+        
+        #ASGIN LIST TO SUITING PROPERTIES
+        self.upperBoxes = upperBoxesMaterials
+
+    
+class GemesisGenerator():
+    
+    def asignMaterial():
+        ob = bpy.context.active_object
+
+        # Get material
+        mat = bpy.data.materials.get("Material")
+        if mat is None:
+            # create material
+            mat = bpy.data.materials.new(name="Material")
+
+        # Assign it to object
+        if ob.data.materials:
+            # assign to 1st material slot
+            ob.data.materials[0] = mat
+        else:
+            # no slots
+            ob.data.materials.append(mat)
+    
+    def asignTexture():
+        donothing = None;
+
+    def createRandomGem(gemId, traits, materials, textures):
+        #RANDOMLY CHOOSE ONE OF THE TRAITS (OBJECTS)
+        #To chose with specifc probabilites in % uses below method (this examplet there are 5 objects to choose from) first object with lowest posibility
+        #upperBox = random.choice(traits.upperBoxes, weights=(10,20,30,40,50), k=1))
+        upperBox = random.choice(traits.upperBoxes)
+        lowerBox = random.choice(traits.lowerBoxes)
+        background = random.choice(traits.backgrounds)
+        crystal = random.choice(traits.crystals)
+        
+        #CHOOSE RANDOM MATERIALS
+        upperBoxMaterial = random.choice(materials.upperBoxes)
+         
+        #CHOOSE RANDOM TEXTURES
+        upperBoxTexture = random.choice(textures.upperBoxes)
+        
+        #ASSIGN TEXTURES TO MATERIALS
+        upperBoxMaterial.texture_slots.add().texture = upperBoxTexture
+        
+        #ASSIGN MATERIALS TO OBJECTS
+        bpy.data.objects[gemesis.upperBox.name].data.materials.append(upperBoxMaterial)
+       
+        
+        #CREATE GEM WITH CHOSEN TRAITS
+        gemesis = Gemesis(gemId, upperBox, lowerBox, background, crystal) 
+        
+        #MAKE ONLY CHOSEN ITEMS VISIBLE AND RENDERABLE
+        bpy.data.objects[gemesis.upperBox.name].hide_render = False
+        bpy.data.objects[gemesis.upperBox.name].hide_viewport = False
+        bpy.data.objects[gemesis.upperBox.name].hide_set(False)
+        
+        bpy.data.objects[gemesis.lowerBox.name].hide_render = False
+        bpy.data.objects[gemesis.lowerBox.name].hide_viewport = False
+        bpy.data.objects[gemesis.lowerBox.name].hide_set(False)
+        
+        bpy.data.objects[gemesis.background.name].hide_render = False
+        bpy.data.objects[gemesis.background.name].hide_viewport = False
+        bpy.data.objects[gemesis.background.name].hide_set(False)
+        
+        bpy.data.objects[gemesis.crystal.name].hide_render = False
+        bpy.data.objects[gemesis.crystal.name].hide_viewport = False
+        bpy.data.objects[gemesis.crystal.name].hide_set(False)
+        
+        
+        print("Gem with gemId " + str(gemId) + " created")
+
+
+    def hideAll():
+        bpy.ops.object.select_all(action='DESELECT')
+        #Unhide all inactive objects
+        for obj in bpy.data.objects:
+            #obj.hide_viewport = False #Enable visibility in all viewports
+            obj.hide_render = True #Enable the object in renders
+            obj.hide_set(True) #Enable the object in the viewport
+            obj.hide_select = True #Enable selection in the viewport
+        print("Hidden")
+        
+    def unHideAll():
+        bpy.ops.object.select_all(action='DESELECT')
+        #Unhide all inactive objects
+        for obj in bpy.data.objects:
+            obj.hide_render = False #Enable the object in renders
+            obj.hide_set(False) #Enable the object in the viewport
+            obj.hide_select = False #Enable selection in the viewport
+        print("Unhidden")
+    
+    #TODO
+    def safeGemInFile():
+        #safe the gem in file
+        donothing = 0
+    
+    #TODO
+    def renderAnimation():
+        donthing = 0
+    
+    ##DO THE MAIN STUFF
+    i = 1;          #gemID
+    maxAmount = 2   #amount of gems you want to create
+    while i <= maxAmount:
+        unHideAll()
+        
+        
+    
+        traits = Traits()
+        materials = Materials()
+        textures = Textures()
+        
+    
+        upperBoxMaterial = random.choice(materials.upperBoxes)
+        pprint(upperBoxMaterial)
+        upperBoxTexture = random.choice(textures.upperBoxes)
+        
+        #TEST
+        upperBoxMaterial.use_nodes = True
+        bsdf = upperBoxMaterial.node_tree.nodes["Principled BSDF"]
+        texImage = upperBoxMaterial.node_tree.nodes.new('ShaderNodeTexImage')
+        texImage.image = bpy.data.images.load("E:\\Programms\\NFTDesign\\Textures\\upperBox_metal.png")
+        upperBoxMaterial.node_tree.links.new(bsdf.inputs['Base Color'], texImage.outputs['Color'])
+       
+        pprint(upperBoxTexture)
+        
+        
+        upperBox = random.choice(traits.upperBoxes)
+        lowerBox = random.choice(traits.lowerBoxes)
+        background = random.choice(traits.backgrounds)
+        crystal = random.choice(traits.crystals)
+        
+        gemesis = Gemesis(0, upperBox, lowerBox, background, crystal)
+         
+        #REMOVE ALL MATERIALS FROM OBJECT
+        for material in bpy.data.objects[gemesis.upperBox.name].data.materials:
+            material.user_clear()
+            bpy.data.materials.remove(material)
+             
+        bpy.data.objects[gemesis.upperBox.name].data.materials.append(upperBoxMaterial)
+        pprint("Material: " + str(bpy.data.objects[gemesis.upperBox.name].data.materials[0]))
+        pprint("Tex: " + str(bpy.data.objects[gemesis.upperBox.name].data.materials[0].node_tree.nodes[0]))
+        #createRandomGem(i, traits, materials, textures)
+        i = i + 1
+       
+       
+       
+#INFO        
+  #PRINTS ALL Properties OF OBJECT
+        #pprint(vars(my_object))
+   
