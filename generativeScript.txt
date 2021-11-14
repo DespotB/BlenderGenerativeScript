@@ -11,12 +11,6 @@ class Gemesis:
         self.background = background
         self.gemStone = gemStone
         self.table = table
-    
-    #TODO    
-    def hashMe(self):
-        #do hash so there are no duplicates
-        print("hashing")
-
 
 class Traits:
     def __init__(self):
@@ -104,20 +98,37 @@ class GemesisGenerator():
     def renderAnimation():
         #render the outcome of the gemesis generator
         #do this before saving the gem
-        donthing = 0
-    
+        donthing = 0        
+
+    #TODO    
+    def checkIfGemesisExist(self):
+        #do hash so there are no duplicates
+        #
+        print("hashing")
+        
+
     ##DO THE MAIN STUFF
-    i = 1;          #gemID
-    maxAmount = 2   #amount of gems you want to create
+    #gemID
+    i = 1;
+    #amount of gems you want to create
+    maxAmount = 2   
     while i <= maxAmount:
         hideAll()
-        
+        #unHideCameraAndLight()
         allTraits = Traits()
-        #ADD ID counter
-       
         createRandomGem(i, allTraits)
+        #if(!checkIfGemesisExist())
+            #renderAnimation()  AWAIT THIS ASYNC
+            #saveAsImage()
+            #saveMetadataAsJson()
+        #else
+            #i = i - 1
         i = i + 1
     
+
+
+
+
 
 #ALL OF THIS STUFF PROBABLY NOT NEEDED
 
