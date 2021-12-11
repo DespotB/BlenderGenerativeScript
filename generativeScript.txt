@@ -74,7 +74,7 @@ class GemesisGenerator():
         for obj in bpy.data.objects:
             #obj.hide_viewport = False #Enable visibility in all viewports
             obj.hide_render = True #Enable the object in renders
-            obj.hide_set(True) #Enable the object in the viewport
+            #obj.hide_set(True) #Enable the object in the viewport
             obj.hide_select = True #Enable selection in the viewport
     
     def unHideAll(self):
@@ -89,8 +89,10 @@ class GemesisGenerator():
         listObObjects = []
         listObObjects.append(bpy.data.objects["Camera1"])
         listObObjects.append(bpy.data.objects["Light"])
-        #listObObjects.append(bpy.data.objects["Light1"])
-        #listObObjects.append(bpy.data.objects["Light2"])
+        listObObjects.append(bpy.data.objects["Fläche1"])
+        listObObjects.append(bpy.data.objects["Fläche2"])
+        listObObjects.append(bpy.data.objects["Fläche3"])
+        listObObjects.append(bpy.data.objects["Fläche4"])
         for obj in listObObjects:
             obj.hide_render = False #Enable the object in renders
             obj.hide_set(False) #Enable the object in the viewport
@@ -101,10 +103,10 @@ class GemesisGenerator():
         data = {}
         data['traits'] = []
         data['traits'].append({
-            "name": 'GΞMΞSIS' + str(gemesis.gemId),
+            "name": 'GΞMΞSIS' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
             "description": 'This is GΞMΞSIS',
-            "external_url": "https://openseacreatures.io/3", #CHANGE
-            "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE
+            "external_url": "https://openseacreatures.io/3", #CHANGE!!!!!!!!!!!! PROBABL REMOVE
+            "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
             "attributes": [
                 {
                     "trait_type": "Category", 
@@ -139,21 +141,27 @@ class GemesisGenerator():
         with open('metadata' + str(gemesis.gemId) + '.json', 'w') as outfile:
             json.dump(data, outfile) 
     
-    
-    #TODO
-    def renderAndSaveImage(self):
+    def renderAndSaveImage(self, gemesis):
         # render settings
         bpy.context.scene.render.image_settings.file_format = 'PNG'
-        bpy.context.scene.render.filepath = "S:\TestRender\GEMESIS" + str(gemesis.gemId)
+        bpy.context.scene.render.filepath = "D:\ProbeRender\gemesis_" + str(gemesis.gemId)
         bpy.ops.render.render(write_still = 1)
         print("Render and save done")
+        
+
+    def checkIfGemesisExists(self, hashNumber):
+        if hashNumber in hashDictForChecking:
+            return True
+        else:
+            hashDictForChecking[hashNumber] = True
+            return False
         
 
 ##DO THE MAIN STUFF
 i = 1 #gemID
 generator = GemesisGenerator()
 hashDictForChecking = {}
-maxAmount = 3 #9669
+maxAmount = 100 #9669
 while i <= maxAmount:
     generator.hideAll()
     generator.unHideCameraAndLight()
@@ -168,17 +176,15 @@ while i <= maxAmount:
     #testTable = allTraits.tables["Table1"]
     #testGemesis = Gemesis(i, testUpperBox, testLowerBox, testBackground, testGemStone, testTable)
     print (hash(gemesis))
-    generator.renderAndSaveImage()
+    #generator.renderAndSaveImage(gemesis)
     #generator.saveMetadataAsJson(testGemesis)
     
-    #gemExists = generator.checkIfGemesisExists(hash(testGemesis))
-    #if gemExists:
-    #i = i - 1
-    #else:
-        #await renderAnimation()  AWAIT THIS ASYNC
-        #saveAsImage()
-        #saveMetadataAsJson()   
-    i = i + 1
+    gemExists = generator.checkIfGemesisExists(hash(gemesis))
+    if not gemExists:
+        generator.renderAndSaveImage(gemesis)
+        #generator.saveMetadataAsJson(gemesis)
+        i = i + 1   
+
 
 
 
