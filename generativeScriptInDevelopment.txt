@@ -4,7 +4,7 @@ import json
 from pprint import pprint
 
 class Gemesis:
-    def __init__(self, gemId, upperBox, lowerBox, background, gemStone, table):
+    def __init__(self, gemId, upperBox, lowerBox, background, gemStone, table, talisman):
         #assign chosen traits to gemesis
         self.gemId = gemId
         self.upperBox = upperBox
@@ -12,10 +12,11 @@ class Gemesis:
         self.background = background
         self.gemStone = gemStone
         self.table = table
+        self.talisman = talisman
 
     def __hash__(self):
         print ("hash done in gemesis class")
-        return hash((self.upperBox, self.lowerBox, self.background, self.gemStone, self.table))
+        return hash((self.upperBox, self.lowerBox, self.background, self.gemStone, self.table, self.talisman))
 
 class Traits:
     def __init__(self):
@@ -25,7 +26,7 @@ class Traits:
         self.gemStones = bpy.data.collections['GemStones'].all_objects
         self.backgrounds = bpy.data.collections['Backgrounds'].all_objects
         self.tables = bpy.data.collections['Table'].all_objects
-    
+        self.talisman = bpy.data.collections['Talisman'].all_objects
 
 class GemesisGenerator():
     
@@ -39,9 +40,10 @@ class GemesisGenerator():
         background = random.choice(traits.backgrounds)
         gemStone = random.choice(traits.gemStones)
         table = random.choice(traits.tables)
+        talisman = random.choice(traits.talisman, cum_weights=(75,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,), k=1))
         
         #CREATE GEM WITH CHOSEN TRAITS
-        gemesis = Gemesis(gemId, upperBox, lowerBox, background, gemStone, table) 
+        gemesis = Gemesis(gemId, upperBox, lowerBox, background, gemStone, table, talisman) 
         
         #MAKE ONLY CHOSEN ITEMS VISIBLE AND RENDERABLE
         #TODO make function for this process
@@ -64,6 +66,10 @@ class GemesisGenerator():
         bpy.data.objects[gemesis.table.name].hide_render = False
         bpy.data.objects[gemesis.table.name].hide_viewport = False
         bpy.data.objects[gemesis.table.name].hide_set(False)
+        
+        bpy.data.objects[gemesis.talisman.name].hide_render = False
+        bpy.data.objects[gemesis.talisman.name].hide_viewport = False
+        bpy.data.objects[gemesis.talisman.name].hide_set(False)
         
         print("Gem with gemId " + str(gemId) + " created")
         return gemesis
@@ -89,10 +95,10 @@ class GemesisGenerator():
         listObObjects = []
         listObObjects.append(bpy.data.objects["Camera1"])
         listObObjects.append(bpy.data.objects["Light"])
-        #listObObjects.append(bpy.data.objects["Fläche1"])
-        #listObObjects.append(bpy.data.objects["Fläche2"])
-        #listObObjects.append(bpy.data.objects["Fläche3"])
-        #listObObjects.append(bpy.data.objects["Fläche4"])
+        listObObjects.append(bpy.data.objects["Fläche1"])
+        listObObjects.append(bpy.data.objects["Fläche2"])
+        listObObjects.append(bpy.data.objects["Fläche3"])
+        listObObjects.append(bpy.data.objects["Fläche4"])
         for obj in listObObjects:
             obj.hide_render = False #Enable the object in renders
             obj.hide_set(False) #Enable the object in the viewport
@@ -135,7 +141,11 @@ class GemesisGenerator():
                 {
                     "trait_type": "Case", 
                     "value": str(gemesis.upperBox.name)
-                }, 
+                },
+                {
+                    "trait_type": "Talisman", 
+                    "value": str(gemesis.talisman.name)
+                },  
             ]
         })
         with open('metadata' + str(gemesis.gemId) + '.json', 'w') as outfile:
@@ -144,20 +154,18 @@ class GemesisGenerator():
     def renderAndSaveImage(self, gemesis):
         # render settings
         bpy.context.scene.render.image_settings.file_format = 'PNG'
-        bpy.context.scene.render.filepath = "D:/ProbeRender/gemesis" + str(gemesis.gemId)
+        bpy.context.scene.render.filepath = "D:\ProbeRender\gemesis_" + str(gemesis.gemId)
         bpy.ops.render.render(write_still = 1)
         print("Render and save done")
-        
         
 
     def checkIfGemesisExists(self, hashNumber):
         if hashNumber in hashDictForChecking:
-            return true
+            return True
         else:
             hashDictForChecking[hashNumber] = True
-            return false
+            return False
         
-            
 
 ##DO THE MAIN STUFF
 i = 1 #gemID
@@ -181,13 +189,12 @@ while i <= maxAmount:
     #generator.renderAndSaveImage(gemesis)
     #generator.saveMetadataAsJson(testGemesis)
     
-    gemExists = generator.checkIfGemesisExists(hash(gemesis)) #sonst (gemesis.hash())
-    if gemExists:
-        i = i - 1
-    else:
+    gemExists = generator.checkIfGemesisExists(hash(gemesis))
+    if not gemExists:
         generator.renderAndSaveImage(gemesis)
-        #generator.saveMetadataAsJson(gemesis)   
-    i = i + 1
+        #generator.saveMetadataAsJson(gemesis)
+        i = i + 1   
+
 
 
 
