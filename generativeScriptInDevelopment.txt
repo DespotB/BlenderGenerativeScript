@@ -108,48 +108,86 @@ class GemesisGenerator():
         #name is the name of the image = ("GΞMΞSIS" + id)
         data = {}
         data['traits'] = []
-        data['traits'].append({
-            "name": 'GΞMΞSIS' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
-            "description": 'This is GΞMΞSIS',
-            "external_url": "https://openseacreatures.io/3", #CHANGE!!!!!!!!!!!! PROBABL REMOVE
-            "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
-            "attributes": [
-                {
-                    "trait_type": "Category", 
-                    "value": "Crystal" #Stones, Crystal, Diamonds
-                }, 
-                {
-                    "trait_type": "Material", 
-                    "value": "Starfish" #Ruby #Emerald
-                }, 
-                {
-                    "trait_type": "Cut", 
-                    "value": "Big" #shapeshape
-                }, 
-                {
-                    "trait_type": "Background", 
-                    "value": str(gemesis.background.name)
-                }, 
-                {
-                    "trait_type": "Table", 
-                    "value": str(gemesis.table.name)
-                }, 
-                {
-                    "trait_type": "Plinth", 
-                    "value": str(gemesis.lowerBox.name)
-                }, 
-                {
-                    "trait_type": "Case", 
-                    "value": str(gemesis.upperBox.name)
-                },
-                {
-                    "trait_type": "Talisman", 
-                    "value": str(gemesis.talisman.name)
-                },  
-            ]
-        })
+        if gemesis.talisman.name == "000":
+            data['traits'].append({
+                "name": 'GEMESIS' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
+                "description": 'This is GEMESIS',
+                "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
+                "attributes": [
+                    {
+                        "trait_type": "Category", 
+                        "value": str.split(gemesis.gemStone.name)[0]
+                    }, 
+                    {
+                        "trait_type": "Material", 
+                        "value": str.split(gemesis.gemStone.name)[1]
+                    }, 
+                    {
+                        "trait_type": "Cut", 
+                        "value": str.split(gemesis.gemStone.name)[2]
+                    }, 
+                    {
+                        "trait_type": "Background", 
+                        "value": str(gemesis.background.name)
+                    }, 
+                    {
+                        "trait_type": "Table", 
+                        "value": str(gemesis.table.name)
+                    }, 
+                    {
+                        "trait_type": "Plinth", 
+                        "value": str(gemesis.lowerBox.name)
+                    }, 
+                    {
+                        "trait_type": "Case", 
+                        "value": str(gemesis.upperBox.name)
+                    }, 
+                ]
+            })
+        else
+            data['traits'].append({
+                "name": 'GEMESIS' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
+                "description": 'This is GEMESIS',
+                "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
+                "attributes": [
+                    {
+                        "trait_type": "Category", 
+                        "value": str.split(gemesis.gemStone.name)[0]
+                    }, 
+                    {
+                        "trait_type": "Material", 
+                        "value": str.split(gemesis.gemStone.name)[1]
+                    }, 
+                    {
+                        "trait_type": "Cut", 
+                        "value": str.split(gemesis.gemStone.name)[2] 
+                    }, 
+                    {
+                        "trait_type": "Background", 
+                        "value": str(gemesis.background.name)
+                    }, 
+                    {
+                        "trait_type": "Table", 
+                        "value": str(gemesis.table.name)
+                    }, 
+                    {
+                        "trait_type": "Plinth", 
+                        "value": str(gemesis.lowerBox.name)
+                    }, 
+                    {
+                        "trait_type": "Case", 
+                        "value": str(gemesis.upperBox.name)
+                    },
+                    {
+                        "trait_type": "Talisman", 
+                        "value": str(gemesis.talisman.name)
+                    },  
+                ]
+            })
+        
         with open('metadata' + str(gemesis.gemId) + '.json', 'w') as outfile:
             json.dump(data, outfile) 
+    
     
     def renderAndSaveImage(self, gemesis):
         # render settings
@@ -194,8 +232,6 @@ while i <= maxAmount:
         generator.renderAndSaveImage(gemesis)
         #generator.saveMetadataAsJson(gemesis)
         i = i + 1   
-
-
 
 
 
