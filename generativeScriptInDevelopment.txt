@@ -26,7 +26,7 @@ class Traits:
         self.gemStones = bpy.data.collections['GemStones'].all_objects
         self.backgrounds = bpy.data.collections['Backgrounds'].all_objects
         self.tables = bpy.data.collections['Table'].all_objects
-        self.talisman = bpy.data.collections['Talisman'].all_objects
+        self.talismans = bpy.data.collections['Talisman'].all_objects
 
 class GemesisGenerator():
     
@@ -40,7 +40,7 @@ class GemesisGenerator():
         background = random.choice(traits.backgrounds)
         gemStone = random.choice(traits.gemStones)
         table = random.choice(traits.tables)
-        talisman = random.choice(traits.talisman, cum_weights=(75,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,2.5,), k=1))
+        talisman = random.choice(traits.talismans)#, cum_weights=(75,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88,0.88), k=1)
         
         #CREATE GEM WITH CHOSEN TRAITS
         gemesis = Gemesis(gemId, upperBox, lowerBox, background, gemStone, table, talisman) 
@@ -112,7 +112,7 @@ class GemesisGenerator():
             data['traits'].append({
                 "name": 'GEMESIS' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
                 "description": 'This is GEMESIS',
-                "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
+                "image": "ipfs://placeholder/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
                 "attributes": [
                     {
                         "trait_type": "Category", 
@@ -144,11 +144,11 @@ class GemesisGenerator():
                     }, 
                 ]
             })
-        else
+        else:
             data['traits'].append({
                 "name": 'GEMESIS' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
                 "description": 'This is GEMESIS',
-                "image": "https://storage.googleapis.com/opensea-prod.appspot.com/puffs/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
+                "image": "ipfs://placeholder/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
                 "attributes": [
                     {
                         "trait_type": "Category", 
@@ -192,7 +192,7 @@ class GemesisGenerator():
     def renderAndSaveImage(self, gemesis):
         # render settings
         bpy.context.scene.render.image_settings.file_format = 'PNG'
-        bpy.context.scene.render.filepath = "D:\ProbeRender\gemesis_" + str(gemesis.gemId)
+        bpy.context.scene.render.filepath = "D:\ProbeRender\gemesis" + str(gemesis.gemId)
         bpy.ops.render.render(write_still = 1)
         print("Render and save done")
         
@@ -209,7 +209,7 @@ class GemesisGenerator():
 i = 1 #gemID
 generator = GemesisGenerator()
 hashDictForChecking = {}
-maxAmount = 100 #9669
+maxAmount = 2 #9669
 while i <= maxAmount:
     generator.hideAll()
     generator.unHideCameraAndLight()
