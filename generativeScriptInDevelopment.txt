@@ -115,7 +115,6 @@ class GemesisGenerator():
         if gemesis.talisman.name == "000":
             data = {
                 "name": 'GEMESIS #' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
-		"id" : str(gemesis.gemId),
                 "description": 'This is GEMESIS',
                 "image": "ipfs://placeholder/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
                 "attributes": [
@@ -152,7 +151,6 @@ class GemesisGenerator():
         else:
             data = {
                 "name": 'GEMESIS #' + str(gemesis.gemId), #CEHCKIF DISPLAYED RIGHT
-		"id" : str(gemesis.gemId),
                 "description": 'This is GEMESIS',
                 "image": "ipfs://placeholder/" + str(gemesis.gemId) + ".png", #CHANGE ipfs://QmTy8w65yBXgyfG2ZBg5TrfB2hPjrDQH3RCQFJGkARStJb
                 "attributes": [
@@ -198,7 +196,7 @@ class GemesisGenerator():
     def renderAndSaveImage(self, gemesis):
         # render settings
         bpy.context.scene.render.image_settings.file_format = 'PNG'
-        bpy.context.scene.render.filepath = "D:\ProbeRender\" + str(gemesis.gemId)
+        bpy.context.scene.render.filepath = "D:\ProbeRender\\" + str(gemesis.gemId)
         bpy.ops.render.render(write_still = 1)
         print("Render and save done")
         
